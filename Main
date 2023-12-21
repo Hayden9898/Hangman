@@ -2,7 +2,11 @@ import java.util.Map;
 String alphabet = "abcdefghijklmnopqrstuvwxyz";
 HashMap<Character, Boolean>guess = new HashMap<Character, Boolean>();
 int x, y;
+int counter = 0;
+int target = 0;
+int wintimer = 0;
 boolean show = false;
+//int target = 11;
 void setup() {
   size(800, 800);
   textSize(20);
@@ -17,6 +21,7 @@ void draw() {
   y = 600;
   for (Map.Entry<Character, Boolean> check : guess.entrySet()) { //Crashes for non characters
     String hidword = "indubitably";
+    // int target = charnumb(hidword); // Find number of unique characters in the string
     int blankx = (width/2)-200;
     int blanky = (height/2)-200;
     if (keyPressed || show) {
@@ -25,9 +30,12 @@ void draw() {
         if (!guess.get(hidword.charAt(i))) { //If the letter is false / not pressed, draw a line
           line(blankx-10, blanky, blankx+20, blanky);
           blankx += 40;
-        } else { //write the character
+        } else { // if true write the character
           text(hidword.charAt(i), blankx, blanky);
           blankx += 40;
+        }
+        if (!guess.get(key) && key == hidword.charAt(i)) { //If the target is false, add from the target.
+          target ++;
         }
       }
     } else { //draw the lines initially
@@ -49,5 +57,28 @@ void draw() {
     fill(0);
     text(check.getKey(), x, y); // Must keep inside for loop for hashmap or it wont recognize the variable
     x += 30;
-  }
+    if (target == hidword.length()) {
+
+      text("Congrats, you guessed it!", (width/2)-200, 400);
+      }
+    }
+    println(target);
+
 }
+
+//int charnumb(String word) {
+//  int charcount = 0; //Will be the total number of non duplicate characters in a string
+//  // If a duplicate is found, do not increase the chat count. If no duplicate increase the char count.
+//  for (int i = 0; i < word.length(); i++) {
+//    int duplicates = 0;
+//    for (int j = i+1; j < word.length(); j++) {
+//      if (word.charAt(i) == word.charAt(j)) {
+//        duplicates ++;
+//      }
+//    }
+//    if (duplicates == 0) {
+//      charcount++;
+//    }
+//  }
+//  return(charcount);
+//}
