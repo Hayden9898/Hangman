@@ -3,9 +3,11 @@ String alphabet = "abcdefghijklmnopqrstuvwxyz";
 HashMap<Character, Boolean>guess = new HashMap<Character, Boolean>();
 int x, y;
 int counter = 0;
+int wrong = 0;
 int target = 0;
 int wintimer = 0;
 boolean show = false;
+boolean countdown = false;
 //int target = 11;
 void setup() {
   size(800, 800);
@@ -24,17 +26,22 @@ void draw() {
     // int target = charnumb(hidword); // Find number of unique characters in the string
     int blankx = (width/2)-200;
     int blanky = (height/2)-200;
-    if (keyPressed || show) {
+    if(!show){
+      if(keyPressed){
       show = true;
+      }
+    }
+    if (show) {
       for (int i = 0; i < hidword.length(); i++) {
         if (!guess.get(hidword.charAt(i))) { //If the letter is false / not pressed, draw a line
           line(blankx-10, blanky, blankx+20, blanky);
           blankx += 40;
+
         } else { // if true write the character
           text(hidword.charAt(i), blankx, blanky);
           blankx += 40;
         }
-        if (!guess.get(key) && key == hidword.charAt(i)) { //If the target is false, add from the target.
+         if (!guess.get(key) && key == hidword.charAt(i)) { //If the target is false, add from the target.
           target ++;
         }
       }
@@ -46,7 +53,7 @@ void draw() {
     }
     //char temp;
     if (keyPressed) {
-      guess.put(key, true); //Refer to the hashmap name created above, not the entry
+      guess.put(key, true); //Refer to the hashmap name created above, not the entr
     }
     if (check.getValue()) {
       fill(#EAE34C);
@@ -60,12 +67,39 @@ void draw() {
     if (target == hidword.length()) {
 
       text("Congrats, you guessed it!", (width/2)-200, 400);
+      countdown = true;
       }
+     if (wrong == 5) {
+
+      text("You lose", (width/2)-200, 400);
+      countdown = true;
+      }
+    
+      
     }
-    println(target);
-
+    for(int i = 0; i < wrong; i++){
+      
+    }
+    //println(target);
+    if(countdown){
+      wintimer++;
+    }
+    if(wintimer >= 300){
+      countdown = false;
+      gameReset();
+      show = false;
+      target = 0;
+      keyPressed = false;
+      wintimer = 0;
+      wrong = 0;
+    }
+ //   println(wrong);
 }
-
+void gameReset(){
+   for (int i = 0; i < alphabet.length(); i++) {
+    guess.put(alphabet.charAt(i), false);
+  }
+}
 //int charnumb(String word) {
 //  int charcount = 0; //Will be the total number of non duplicate characters in a string
 //  // If a duplicate is found, do not increase the chat count. If no duplicate increase the char count.
